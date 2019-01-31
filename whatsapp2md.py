@@ -30,7 +30,7 @@ class Entry:
         self.text = text
         self.image = image
 
-    def format_md(self, show_timestamp: bool=True, show_sender: bool=False):
+    def format_md(self, show_timestamp: bool=True, show_sender: bool=False) -> str:
         """
         Formats the entry as a piece of markdown text.
         :param show_timestamp: whether to show the timestamp of the entry.
