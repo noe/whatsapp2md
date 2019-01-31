@@ -1,48 +1,42 @@
 #!/usr/bin/env python3
+
+# Copyright (c) 2019-present, Noe Casas
+# All rights reserved.
+#
+# This source code is licensed under the license found in the LICENSE file in
+# the root directory of this source tree.
+
+
 import argparse
 from datetime import datetime
 from typing import List, Iterable, Tuple, Optional
 
 
-def parse_timestamp(line: str) -> Tuple[Optional[datetime], str]:
-    if '-' not in line:
-        return None, line  # Not a proper date
-
-    date_time, rest_of_line = line.split('-', 1)
-    datetime_format = '%d/%m/%y %H:%M '
-    try:
-        t = datetime.strptime(date_time, datetime_format)
-        rest_of_line = rest_of_line[1:]  # remove leading space
-        return t, rest_of_line
-    except ValueError:
-        return None, line  # Not a proper date
-
-
-def parse_sender(line: str) -> Tuple[str, str]:
-    if ':' not in line:
-        return "", line   # It's a system message
-
-    sender, rest_of_line = line.split(':', 1)
-    rest_of_line = rest_of_line[1:]  # remove leading space
-    return sender, rest_of_line
-
-
-def parse_entry(line:str, timestamp: datetime, sender: str):
-    if line.startswith('\u200e'):
-        image, _ = line[1:].split(' ', 1)
-        return Entry(timestamp, sender, None, image)
-    else:
-        return Entry(timestamp, sender, line, None)
-
-
 class Entry:
-    def __init__(self, timestamp, sender, text, image):
+    """
+    Collects the data associated with a whatsapp message.
+    """
+
+    def __init__(self, timestamp: datetime, sender: str, text: str, image: str):
+        """
+        Constructor.
+        :param timestamp: Timestamp for the whatsapp message.
+        :param sender: sender of the whatsapp message.
+        :param text: text of the message.
+        :param image: image in the message.
+        """
         self.timestamp = timestamp
         self.sender = sender
         self.text = text
         self.image = image
 
-    def format_md(self, show_timestamp=True, show_sender=False):
+    def format_md(self, show_timestamp: bool=True, show_sender: bool=False):
+        """
+        Formats the entry as a piece of markdown text.
+        :param show_timestamp: whether to show the timestamp of the entry.
+        :param show_sender: whether to show the sender of the message.
+        :return: markdown-formatted text of the entry.
+        """
         formatted_sender = '`{}`'.format(self.sender)
         formatted_timestamp = '`{}`'.format(self.timestamp.strftime('%H:%M'))
         formatted_image = ('' if self.image is None
@@ -63,7 +57,60 @@ class Entry:
         return result + '\n'
 
 
+def parse_timestamp(line: str) -> Tuple[Optional[datetime], str]:
+    """
+    Extracts the leading timestamp of a chat line
+    :param line: Line to parse
+    :return: a tuple with the timestamp (if any) and the rest of the line.
+    """
+    if '-' not in line:
+        return None, line  # Not a proper date
+
+    date_time, rest_of_line = line.split('-', 1)
+    datetime_format = '%d/%m/%y %H:%M '
+    try:
+        t = datetime.strptime(date_time, datetime_format)
+        rest_of_line = rest_of_line[1:]  # remove leading space
+        return t, rest_of_line
+    except ValueError:
+        return None, line  # Not a proper date
+
+
+def parse_sender(line: str) -> Tuple[str, str]:
+    """
+    Extracts the sender of a line (the timestamp should already be removed)
+    :param line: Line to parse.
+    :return: a tuple with the sender (if any) and the rest of the line.
+    """
+    if ':' not in line:
+        return "", line   # It's a system message
+
+    sender, rest_of_line = line.split(':', 1)
+    rest_of_line = rest_of_line[1:]  # remove leading space
+    return sender, rest_of_line
+
+
+def parse_entry(line:str, timestamp: datetime, sender: str) -> Entry:
+    """
+    Extracts an entry from a line and the previously extracted info.
+    :param line: Line with the message (without timestamp or sender)
+    :param timestamp: timestamp for the entry.
+    :param sender: sender for the entry.
+    :return: newly created Entry from the given line.
+    """
+    if line.startswith('\u200e'):
+        image, _ = line[1:].split(' ', 1)
+        return Entry(timestamp, sender, None, image)
+    else:
+        return Entry(timestamp, sender, line, None)
+
+
 def parse_lines(lines: Iterable[str]) -> List[Entry]:
+    """
+    Parses the lines in a whatsapp chat export.
+    :param lines: lines to prse.
+    :return: list of entries.
+    """
     entries = []
     for lineno, line in enumerate(lines, 1):
         line = line.strip()
@@ -87,7 +134,7 @@ def parse_lines(lines: Iterable[str]) -> List[Entry]:
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser('Whatsapp chat export parser into markdown')
     parser.add_argument('chat_file')
     parser.add_argument('--hide-days', action='store_true')
     parser.add_argument('--show-sender', action='store_true')
