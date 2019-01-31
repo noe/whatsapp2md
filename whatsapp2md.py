@@ -135,10 +135,10 @@ def parse_lines(lines: Iterable[str]) -> List[Entry]:
 
 def main():
     parser = argparse.ArgumentParser('Whatsapp chat export parser into markdown')
-    parser.add_argument('chat_file')
-    parser.add_argument('--hide-days', action='store_true')
-    parser.add_argument('--show-sender', action='store_true')
-    parser.add_argument('--hide-timestamp', action='store_true')
+    parser.add_argument('chat_file', help='Chat text file')
+    parser.add_argument('--hide-days', action='store_true', help='Hides the day headers')
+    parser.add_argument('--show-sender', action='store_true', help='Shows the sender of each message')
+    parser.add_argument('--hide-timestamp', action='store_true', help='Hides message timestamps')
     args = parser.parse_args()
     with open(args.chat_file) as f:
         entries = parse_lines(f)
