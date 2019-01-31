@@ -20,8 +20,8 @@ The workflow steps are to:
 
 1. Create a whatsapp group 
 2. Take pictures and quick notes on the go with the whatsapp mobile app.
-3. Takes notes via whatsapp web interface from your laptop.
-4. Export the group's chat history.
+3. Take notes via whatsapp web interface from your laptop.
+4. After the conference, export the group's chat history via email.
 5. Create a self-contained PDF with your notes and pictures.
 
 ### Create a whatsapp group for the conference
