@@ -1,4 +1,4 @@
-# How to take notes a conference (or any event)
+# How to take notes at a conference (or any event)
 
 
 I have recently started attending scientific conferences
