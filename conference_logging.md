@@ -24,6 +24,7 @@ The workflow steps are to:
 4. Export the group's chat history.
 5. Create a self-contained PDF with your notes and pictures.
 
+
 ### Create a whatsapp group for the conference
 
 The idea is to create a whatsapp group where all notes and pictures will be sent to.
