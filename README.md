@@ -18,6 +18,8 @@ You can then use your favourite markdown viewer to
 print the it to PDF to get a self-contained document
 that you can archive or share.
 
+You can find an example of a generated markdown printed to pdf
+[here](https://github.com/noe/whatsapp2md/raw/example/examples/superconf.pdf).
 
 # Technical details
 

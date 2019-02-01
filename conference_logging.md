@@ -24,6 +24,9 @@ The workflow steps are to:
 4. After the conference, export the group's chat history via email.
 5. Create a self-contained PDF with your notes and pictures.
 
+See an example of generated PDF notes 
+[here](https://github.com/noe/whatsapp2md/raw/example/examples/superconf.pdf).
+
 ### Create a whatsapp group for the conference
 
 The idea is to create a whatsapp group where all notes and pictures will be sent to.
@@ -60,3 +63,5 @@ Optionally, edit the markdown file as you please (e.g. adding some extra info, r
 
 Finally, open the markdown file with your favourite viewer and print it to PDF to get a beautiful self-contained PDF that you can archive or share.
 
+See an example of generated PDF notes 
+[here](https://github.com/noe/whatsapp2md/raw/example/examples/superconf.pdf).
