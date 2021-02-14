@@ -148,7 +148,7 @@ def main():
     parser.add_argument('--show-sender', action='store_true', help='Shows the sender of each message')
     parser.add_argument('--hide-timestamp', action='store_true', help='Hides message timestamps')
     args = parser.parse_args()
-    with open(args.chat_file) as f:
+    with open(args.chat_file, encoding="utf-8") as f:
         entries = parse_lines(f)
 
     last_day = None
