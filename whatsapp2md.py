@@ -67,13 +67,21 @@ def parse_timestamp(line: str) -> Tuple[Optional[datetime], str]:
         return None, line  # Not a proper date
 
     date_time, rest_of_line = line.split('-', 1)
-    datetime_format = '%d/%m/%y %H:%M '
-    try:
-        t = datetime.strptime(date_time, datetime_format)
-        rest_of_line = rest_of_line[1:]  # remove leading space
-        return t, rest_of_line
-    except ValueError:
-        return None, line  # Not a proper date
+    datetime_formats = [
+        '%d/%m/%y %H:%M ',
+        '%d/%m/%y, %H:%M ',
+        '[%d/%m/%y, %H:%M:%S] ',
+    ]
+
+    for datetime_format in datetime_formats:
+        try:
+            t = datetime.strptime(date_time, datetime_format)
+            rest_of_line = rest_of_line[1:]  # remove leading space
+            return t, rest_of_line
+        except ValueError:
+            continue
+
+    return None, line  # Not a proper date
 
 
 def parse_sender(line: str) -> Tuple[str, str]:
