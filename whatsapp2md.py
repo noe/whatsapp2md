@@ -63,23 +63,33 @@ def parse_timestamp(line: str) -> Tuple[Optional[datetime], str]:
     :param line: Line to parse
     :return: a tuple with the timestamp (if any) and the rest of the line.
     """
-    if '-' not in line:
-        return None, line  # Not a proper date
-
-    date_time, rest_of_line = line.split('-', 1)
     datetime_formats = [
         '%d/%m/%y %H:%M ',
         '%d/%m/%y, %H:%M ',
-        '[%d/%m/%y, %H:%M:%S] ',
+        '%Y-%m-%d, %H:%M ',
     ]
 
     for datetime_format in datetime_formats:
         try:
+            segments = line.split('-')
+            separator_pos = datetime_format.count('-') + 1
+            date_time = '-'.join(segments[0:separator_pos])
+            rest_of_line = '-'.join(segments[separator_pos:])
             t = datetime.strptime(date_time, datetime_format)
-            rest_of_line = rest_of_line[1:]  # remove leading space
             return t, rest_of_line
         except ValueError:
-            continue
+            pass
+
+    try:
+        fields = line.split('] ', 1)
+        if (len(fields) != 2):
+            return None, line
+        date_time, rest_of_line = fields
+        datetime_format = '[%d/%m/%y, %H:%M:%S'
+        t = datetime.strptime(date_time, datetime_format)
+        return t, rest_of_line
+    except ValueError:
+        pass
 
     return None, line  # Not a proper date
 
@@ -128,8 +138,8 @@ def parse_lines(lines: Iterable[str]) -> List[Entry]:
         if not timestamp:
             # this line is continuation of a previous one
             if not entries or entries[-1].text is None:
-                msg = "Malformed file: line {} is a continuation of no previous line"
-                raise ValueError(msg.format(lineno))
+                msg = "Malformed file: line {} ({}) is a continuation of no previous line"
+                raise ValueError(msg.format(lineno, line))
 
             entries[-1].text += '\n' + line
             continue
