@@ -66,6 +66,7 @@ def parse_timestamp(line: str) -> Tuple[Optional[datetime], str]:
     datetime_formats = [
         '%d/%m/%y %H:%M ',
         '%d/%m/%y, %H:%M ',
+        '%d/%m/%Y, %H:%M ',
         '%Y-%m-%d, %H:%M ',
     ]
 
