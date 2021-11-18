@@ -2,6 +2,12 @@
 
 Parses whatsapp chat exports and generates a document.
 
+```
+Note: the format of the exported chats has been changing since I wrote this
+project, and currently it may not work with some versions.
+```
+
+
 You can export a whatsapp chat by means of option
 _More → Export Chat_ in the chat's menu, and choose
 to send it by email to yourself (including images).
