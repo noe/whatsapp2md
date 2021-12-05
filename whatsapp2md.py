@@ -120,6 +120,9 @@ def parse_entry(line:str, timestamp: datetime, sender: str) -> Entry:
     if line.startswith('\u200e'):
         image, _ = line[1:].split(' ', 1)
         return Entry(timestamp, sender, None, image)
+    elif line.endswith('(file attached)'):
+        image = line[:-16]
+        return Entry(timestamp, sender, None, image)
     else:
         return Entry(timestamp, sender, line, None)
 
@@ -139,6 +142,14 @@ def parse_lines(lines: Iterable[str]) -> List[Entry]:
         if not timestamp:
             # this line is continuation of a previous one
             if not entries or entries[-1].text is None:
+                # maybe the previous line was an image
+                if entries[-1].image is not None:
+                    timestamp = entries[-1].timestamp
+                    sender = entries[-1].sender
+                    entry = parse_entry(line, timestamp, sender)
+                    entries.append(entry)
+                    continue
+
                 msg = "Malformed file: line {} ({}) is a continuation of no previous line"
                 raise ValueError(msg.format(lineno, line))
 
